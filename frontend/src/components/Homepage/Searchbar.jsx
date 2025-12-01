@@ -826,15 +826,16 @@ const SearchComponent = ({
     setPage(1);
     handleSearch();
   }}
-  className="flex items-center justify-center gap-2 md:w-auto bg-[#F5C037] text-black px-4 py-1 rounded-full border-[0.6px] border-white hover:bg-[#e0ad2f] hover:text-black transition"
+  className="flex items-center justify-center gap-2 md:hidden bg-[#F5C037] text-black px-4 py-1 rounded-full border-[0.6px] border-white hover:bg-[#e0ad2f] hover:text-black transition"
 >
   <FaSearchPlus className="text-sm" />
   <span>Search</span>
 </button>
 
+
       {/* ⭐ WHATSAPP & HELP SECTION BELOW ON MOBILE */}
       <div className="flex justify-center items-center gap-2">
-        <span className="text-white text-[15px] sm:text-[18px] md:text-[20px] font-semibold">
+        <span className="text-white text-[10px] sm:text-[16px] md:text-[20px] font-semibold">
           Need Help?
         </span>
 
@@ -842,7 +843,7 @@ const SearchComponent = ({
           href="https://wa.me/+919511195111"
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-green-500 text-white p-2 rounded-full shadow-lg hover:bg-green-600 transition"
+          className="bg-green-500 text-white p-1 rounded-full shadow-lg hover:bg-green-600 transition"
         >
           <FaWhatsapp className="text-xl md:text-2xl" />
         </a>
