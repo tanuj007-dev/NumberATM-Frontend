@@ -700,7 +700,7 @@ const BackgroundEffect = ({
         </div>
 
         {/* Active Filters and Results Section */}
-        <div className="flex flex-wrap rounded-lg items-center text-xs sm:text-sm justify-center sm:justify-between p-1 sm:p-2 bg-[#F3F9FB] gap-2 sm:gap-0">
+        {/* <div className="flex flex-wrap rounded-lg items-center text-xs sm:text-sm justify-center sm:justify-between p-1 sm:p-2 bg-[#F3F9FB] gap-2 sm:gap-0">
           <div className="flex flex-nowrap gap-2 justify-center items-center sm:items-start p-1 whitespace-nowrap overflow-x-auto no-scrollbar">
             <span className="text-[#5F6C72]">Active Filter :</span>
             <span className="text-[#191C1F] inline-flex items-center">
@@ -717,10 +717,10 @@ const BackgroundEffect = ({
               <span className="text-gray-600">Results found.</span>
             </span>
           </div>
-        </div>
+        </div> */}
       </div>
 
-      <div className="relative pb-6 pt-4">
+      <div className="relative pb-6 pt-8">
         <div className="grid gap-2 sm:gap-4 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4">
           {decryptedNumbers?.length > 0 ? (
             decryptedNumbers?.slice(0, visibleCount).map((item, index) => {
@@ -861,3 +861,4 @@ const BackgroundEffect = ({
 };
 
 export default BackgroundEffect;
+
