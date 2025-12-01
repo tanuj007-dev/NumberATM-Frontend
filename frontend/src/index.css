@@ -1,0 +1,382 @@
+/* ============================================
+   FONT IMPORTS
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ============================================
+   TAILWIND DIRECTIVES
+   ============================================ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply font-poppins text-gray-900 antialiased;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Typography Hierarchy */
+  h1 {
+    @apply text-4xl font-bold leading-tight tracking-tight;
+  }
+
+  @media (min-width: 768px) {
+    h1 {
+      @apply text-5xl;
+    }
+  }
+
+  h2 {
+    @apply text-3xl font-bold leading-tight tracking-tight;
+  }
+
+  @media (min-width: 768px) {
+    h2 {
+      @apply text-4xl;
+    }
+  }
+
+  h3 {
+    @apply text-2xl font-semibold leading-snug;
+  }
+
+  @media (min-width: 768px) {
+    h3 {
+      @apply text-3xl;
+    }
+  }
+
+  h4 {
+    @apply text-xl font-semibold leading-snug;
+  }
+
+  @media (min-width: 768px) {
+    h4 {
+      @apply text-2xl;
+    }
+  }
+
+  h5 {
+    @apply text-lg font-semibold leading-normal;
+  }
+
+  @media (min-width: 768px) {
+    h5 {
+      @apply text-xl;
+    }
+  }
+
+  h6 {
+    @apply text-base font-semibold leading-normal;
+  }
+
+  @media (min-width: 768px) {
+    h6 {
+      @apply text-lg;
+    }
+  }
+
+  p {
+    @apply text-base leading-relaxed;
+  }
+
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  /* Form Elements */
+  input,
+  textarea,
+  select {
+    @apply bg-transparent;
+  }
+
+  button {
+    @apply transition-all duration-200 cursor-pointer;
+  }
+}
+
+/* ============================================
+   COMPONENT STYLES
+   ============================================ */
+@layer components {
+  /* Prose/Article Content Styling */
+  .prose h1,
+  .prose h2,
+  .prose h3,
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    @apply scroll-mt-24 font-bold text-gray-900;
+  }
+
+  .prose h1 {
+    @apply text-3xl mt-8 mb-4;
+  }
+
+  @media (min-width: 768px) {
+    .prose h1 {
+      @apply text-4xl;
+    }
+  }
+
+  .prose h2 {
+    @apply text-2xl mt-8 mb-4;
+  }
+
+  @media (min-width: 768px) {
+    .prose h2 {
+      @apply text-3xl;
+    }
+  }
+
+  .prose h3 {
+    @apply text-xl mt-6 mb-3;
+  }
+
+  @media (min-width: 768px) {
+    .prose h3 {
+      @apply text-2xl;
+    }
+  }
+
+  .prose h4 {
+    @apply text-lg mt-6 mb-3;
+  }
+
+  @media (min-width: 768px) {
+    .prose h4 {
+      @apply text-xl;
+    }
+  }
+
+  .prose p {
+    @apply mb-4 leading-relaxed text-gray-700 text-base;
+  }
+
+  .prose ul,
+  .prose ol {
+    @apply mb-4 pl-6 space-y-2;
+  }
+
+  .prose ul {
+    @apply list-disc;
+  }
+
+  .prose ol {
+    @apply list-decimal;
+  }
+
+  .prose li {
+    @apply text-gray-700 leading-relaxed;
+  }
+
+  .prose strong,
+  .prose b {
+    @apply font-semibold text-gray-900;
+  }
+
+  .prose em,
+  .prose i {
+    @apply italic;
+  }
+
+  .prose blockquote {
+    @apply my-6 pl-4 border-l-4 border-gray-300 italic text-gray-600;
+  }
+
+  .prose a {
+    @apply text-blue-600 underline;
+  }
+
+  .prose a:hover {
+    @apply text-blue-800;
+  }
+
+  .prose code {
+    @apply bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+
+  .prose pre {
+    @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-4;
+  }
+
+  .prose img {
+    @apply rounded-lg my-6;
+  }
+
+  .prose hr {
+    @apply my-8 border-gray-300;
+  }
+
+  /* Quill Editor Custom Styles */
+  .ql-editor-custom h1 {
+    @apply text-3xl font-bold mt-8 mb-4 text-gray-900;
+  }
+
+  @media (min-width: 768px) {
+    .ql-editor-custom h1 {
+      @apply text-4xl;
+    }
+  }
+
+  .ql-editor-custom h2 {
+    @apply text-2xl font-bold mt-8 mb-4 text-gray-900;
+  }
+
+  @media (min-width: 768px) {
+    .ql-editor-custom h2 {
+      @apply text-3xl;
+    }
+  }
+
+  .ql-editor-custom h3 {
+    @apply text-xl font-semibold mt-6 mb-3 text-gray-900;
+  }
+
+  @media (min-width: 768px) {
+    .ql-editor-custom h3 {
+      @apply text-2xl;
+    }
+  }
+
+  .ql-editor-custom h4 {
+    @apply text-lg font-semibold mt-6 mb-3 text-gray-900;
+  }
+
+  @media (min-width: 768px) {
+    .ql-editor-custom h4 {
+      @apply text-xl;
+    }
+  }
+
+  .ql-editor-custom p {
+    @apply mb-4 leading-relaxed text-gray-700 text-base;
+  }
+
+  .ql-editor-custom ul,
+  .ql-editor-custom ol {
+    @apply mb-4 pl-6 list-disc space-y-2;
+  }
+
+  .ql-editor-custom strong {
+    @apply font-semibold text-gray-900;
+  }
+
+  .ql-editor-custom blockquote {
+    @apply my-6 pl-4 border-l-4 border-gray-300 italic text-gray-600;
+  }
+
+  .ql-editor-custom a {
+    @apply text-blue-600 underline;
+  }
+
+  .ql-editor-custom a:hover {
+    @apply text-blue-800;
+  }
+}
+
+/* ============================================
+   UTILITY STYLES
+   ============================================ */
+@layer utilities {
+  /* Scrollbar Hide */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Text Utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Line Clamp Utilities */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll {
+  animation: scroll 20s linear infinite;
+}
+
+/* ============================================
+   TABLE OF CONTENTS STYLES
+   ============================================ */
+.toc-active {
+  @apply text-gray-900 font-semibold pl-2 transition-all duration-300;
+  border-left: 3px solid #7C3AED;
+}
+
+.toc-hover:hover {
+  @apply text-gray-900 transition-all duration-200;
+  transform: translateX(4px);
+}
+
+/* ============================================
+   SWIPER CUSTOMIZATION
+   ============================================ */
+.reel-swiper .swiper-pagination-bullet {
+  background-color: #fff !important;
+  opacity: 0.7;
+}
+
+.reel-swiper .swiper-pagination-bullet-active {
+  background-color: #F97316 !important;
+  opacity: 1;
+}
+
+/* ============================================
+   CUSTOM COMPONENT STYLES
+   ============================================ */
+/* Phone Number Display */
+.number-display {
+  color: #F5C037;
+}
+
+.number-display .text-orange-500 {
+  color: #17565D !important;
+  font-weight: bold;
+}

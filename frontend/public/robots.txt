@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /admin
+Disallow: /orders
+Disallow: /favorites
+Disallow: /profile
+Disallow: /payment-success
+Disallow: /checkout
+
+
+Sitemap: https://www.numberatm.com/sitemap.xml
