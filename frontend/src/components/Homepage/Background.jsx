@@ -766,7 +766,7 @@ const BackgroundEffect = ({
                       <div className="cursor-pointer flex flex-col items-center pt-4 pb-2 space-y-1 w-full ">
                         <Link
                           to={`/vip-number/${item.number}`}
-                          className="text-2xl sm:text-3xl [transform:scaleY(1.3)] font-semibold text-center text-[#F5C037] px-2"
+                          className="text-xl sm:text-3xl [transform:scaleY(1.3)] font-semibold text-center text-[#F5C037] px-3"
                         >
                           {searchParams.get("searchInput") && item?.number?.includes(searchParams.get("searchInput")) ? (
                             <div className="[text-shadow:0px_0px_12px_black]" dangerouslySetInnerHTML={{ __html: highlighterSearch(item.number, searchParams.get("searchInput")) }} />
@@ -861,4 +861,3 @@ const BackgroundEffect = ({
 };
 
 export default BackgroundEffect;
-
