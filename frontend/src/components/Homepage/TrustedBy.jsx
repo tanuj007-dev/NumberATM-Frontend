@@ -15,6 +15,9 @@ import { addToFavs, removeFromFavs } from "../../redux/favorites/favSlice";
 import UserAxiosAPI from "../../api/userAxiosAPI";
 import toast from "react-hot-toast";
 import { IoHeartDislike } from "react-icons/io5";
+import { addToCart } from "../../redux/cart/cartSlice";
+import { fbqTrack } from "../utils/fbq";
+
 
 
 const TrustedByElites = () => {
@@ -23,41 +26,81 @@ const TrustedByElites = () => {
   const navigate = useNavigate();
 const dispatch = useDispatch();
 const fav = useSelector((state) => state.fav?.items);
+const cart = useSelector((state) => state.cart?.items);
 const user = useSelector((state) => state.user.user);
 const axios = UserAxiosAPI();
+
+// SAVE REAL VIP NUMBER ID
+const normalizeItem = (item) => ({
+  _id: item?._id,
+  vipId: item?._id, // Use _id as vipId for consistency
+  number: item.number || item.mobile || item.phone || "N/A",
+  price: item.roundedFinalPrice ?? item.price ?? 0,
+  category: item.category || item.type || "VIP",
+  sum: item.total ?? item.sum ?? 0,
+  total: item.total ?? 0,
+  highLightedNumber: item.highLightedNumber || item.number || item.mobile || "",
+  roundedFinalPrice: item.roundedFinalPrice ?? item.price ?? 0,
+  roundedOriginalPrice: item.roundedOriginalPrice ?? item.originalPrice ?? 0,
+  owner: item.owner || {},
+});
 const handleAddToFav = async (item) => {
   try {
     dispatch(addToFavs(item));
-    const isPresent = fav?.find((it) => it._id === item._id);
+
+    const isPresent = fav?.find((it) => it.vipId === item.vipId);
 
     if (user && !isPresent) {
-      await axios.post("/fav/add", { vipNumberId: item?._id });
+      await axios.post("/fav/add", { vipNumberId: item.vipId });
     }
   } catch (e) {
     toast.error(e?.response?.data?.message || "Failed to Add to Favourites!");
-    console.log(e);
   }
 };
 
 const removeFavItem = async (item) => {
   try {
     if (user) {
-      await axios.post("/fav/remove", { vipNumberId: item?._id });
+      await axios.post("/fav/remove", { vipNumberId: item.vipId });
     }
-    dispatch(removeFromFavs(item?._id));
+
+    dispatch(removeFromFavs(item.vipId));
+
     toast(`Removed ${item.number} from Favourites`, {
-      icon: <IoHeartDislike className="text-lg" />,
+      icon: <IoHeartDislike className="text-lg" />
     });
   } catch (error) {
     toast.error("Failed to remove item. Please try again!");
   }
 };
 
-  const handleAddToCart = (item) => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    cart.push(item);
-    localStorage.setItem("cart", JSON.stringify(cart));
-  };
+const handleAddToCart = async (item) => {
+  const price = item?.price ?? 0;
+
+  try {
+    dispatch(addToCart(item));
+
+    const isPresent = cart?.find((it) => it.vipId === item.vipId);
+
+    if (user && !isPresent) {
+      await axios.post("/cart/add", { vipNumberId: item.vipId });
+    }
+
+    if (window.gtag) {
+      window.gtag("event", "conversion", {
+        send_to: "AW-16838705843/l-w1CJnEtpcaELOFqd0-",
+        value: price,
+        currency: "INR",
+      });
+    }
+
+    if (typeof fbqTrack === "function") {
+      fbqTrack("AddToCart", { value: price, currency: "INR" });
+    }
+  } catch (e) {
+    toast.error("Failed to add to cart!");
+  }
+};
 
   const truncateWords = (text, limit = 3) => {
     if (!text) return "";
@@ -80,15 +123,7 @@ const removeFavItem = async (item) => {
         const items = data?.data || data?.numbers || data || [];
         if (!mounted) return;
         // lightweight normalization to match previous shape
-        const normalized = items.map((it) => ({
-          number: it.number || it.mobile || it.phone || "N/A",
-          total: it.total ?? it.sum ?? 0,
-          category: it.category || it.type || "VIP",
-          highLightedNumber: it.highLightedNumber || it.number || it.mobile || "",
-          roundedFinalPrice: it.price ?? it.roundedFinalPrice ?? it.amount ?? 0,
-          roundedOriginalPrice: it.originalPrice ?? it.roundedOriginalPrice ?? it.mrp ?? 0,
-          owner: it.owner || {},
-        }));
+        const normalized = items.map(normalizeItem);
         setNumbers(normalized);
       } catch (err) {
         console.error("Failed to load patterns:", err);
@@ -119,7 +154,7 @@ const removeFavItem = async (item) => {
 
           {/* White Body with List */}
           <ul className="space-y-2 text-black text-xs sm:text-sm px-4 sm:px-8 py-6 sm:py-12">
-            <li className="flex items-start gap-2">
+            <li className="flex items-start gap-2"> 
               <FaCaretRight className="w-4 h-4 mt-1 text-[#17565D]" />
               <span>Buy VIP Number online from India's largest inventory</span>
             </li>
@@ -158,7 +193,7 @@ const removeFavItem = async (item) => {
           <Swiper
   modules={[Navigation, Autoplay]}
   spaceBetween={20}
-  slidesPerView={2}
+  slidesPerView={1}
   grabCursor={true}
   loop={numbers.length > 3}
   autoplay={{ delay: 3000, disableOnInteraction: false }}
@@ -167,7 +202,7 @@ const removeFavItem = async (item) => {
     nextEl: ".next-sl",
   }}
   breakpoints={{
-    0: { slidesPerView: 2 },
+    0: { slidesPerView: 1 },
     640: { slidesPerView: 2 },
     1024: { slidesPerView: 3 },
   }}
@@ -179,8 +214,11 @@ const removeFavItem = async (item) => {
               ) : numbers.length === 0 ? (
                 <div className="w-full text-center py-8 text-black">No numbers found</div>
               ) : (
-                numbers.map((item, index) => (
-                  <SwiperSlide key={item.number ?? index}>
+                numbers.map((item, index) => {
+                  const isFav = fav?.some((f) => f.vipId === item.vipId);
+                  
+                  return (
+                  <SwiperSlide key={item.vipId ?? index}>
                      <Link to={`/vip-number/${item.number}`} className="block">
                      
                     
@@ -188,102 +226,108 @@ const removeFavItem = async (item) => {
                       key={index}
                       className="bg-[#fcfae5] rounded-2xl p-2 border-2 border-[#17565D] min-h-[80px] w-full relative max-w-[300px] mx-auto my-3"
                     >
+                      {/* Heart icon positioned at top left */}
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          isFav ? removeFavItem(item) : handleAddToFav(item);
+                        }}
+                        className="absolute top-3 left-4 p-1 rounded-full hover:scale-110 transition z-10"
+                      >
+                        {isFav ? (
+                          <FaHeart size={22} className="text-red-500" />
+                        ) : (
+                          <FaRegHeart size={22} className="text-[#17565D]" />
+                        )}
+                      </button>
+                      
                       <div className="rounded-2xl flex flex-col items-center border-2 border-[rgb(255,207,81)] py-2">
                         <div className="w-full px-2">
-                          <div className="flex items-center justify-between  text-xs">
-                            <div className="rounded-full bg-[#1d4a46] py-0 px-2 border-2 border-[#ce9e3e] text-white text-center text-[10px]">
-                              <span>01:36:31 Left</span>
-                            </div>
-                            
-                     <button
-  onClick={(e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const isFav = fav?.find((f) => f.number === item.number);
-
-    if (isFav) {
-      removeFavItem(item);
-    } else {
-      handleAddToFav(item);
-    }
-  }}
-  className="p-1 rounded-full hover:scale-110 transition"
->
-  {fav?.find((f) => f.number === item.number) ? (
-    <FaHeart size={22} className="text-red-500" />
-  ) : (
-    <FaRegHeart size={22} className="text-[#17565D]" />
-  )}
-</button>
-
-
-                            <div className="border-[#17565D] border-l-2 pl-2 hidden sm:block text-black">
+                          <div className="flex items-center justify-end text-xs">
+                            <div className="border-[#17565D] border-l-2 pl-2 sm:block text-black">
                               <small className=" text-sm block leading-none">Sum Total {item.total}</small>
-                             
                             </div>
                           </div>
                         </div>
 
                         <div
-                          className="rounded-2xl overflow-hidden my-3 w-full bg-[length:200%_200%] bg-center"
+                          className="rounded-2xl overflow-hidden my-5 w-full bg-[length:200%_200%] bg-center"
                           style={{
                             background: "linear-gradient(90deg, rgb(19,52,55),rgb(44,106,108), rgb(19,52,55))",
                           }}
                         >
-                          <div className="cursor-pointer flex flex-col items-center pt-4 pb-2 space-y-1 w-full ">
-                            <Link
-                              to={`/vip-number/${item.number}`}
-                              className="text-2xl sm:text-3xl [transform:scaleY(1.3)] font-semibold text-center text-[#F5C037] px-2 "
-                            >
-                              <div
-                                className="[text-shadow:0px_0px_12px_black]"
-                                dangerouslySetInnerHTML={{ __html: item.highLightedNumber }}
-                              />
-                            </Link>
+                         <div className="cursor-pointer flex flex-col items-center pt-4 pb-2 space-y-1 w-full">
+  <Link
+    to={`/vip-number/${item.number}`}
+    className="text-2xl sm:text-3xl [transform:scaleY(1.3)] font-semibold text-center text-[#F5C037] px-2 
+               whitespace-nowrap overflow-hidden text-ellipsis"
+    style={{ fontFamily: "'Lato', sans-serif" }}
+  >
+    <div
+      className="[text-shadow:0px_0px_12px_black]"
+      style={{ fontFamily: "'Lato', sans-serif" }}
+      dangerouslySetInnerHTML={{ __html: item.highLightedNumber }}
+    />
+  </Link>
 
-                            <Link
-                              to={`/vip-number/${item.number}`}
-                              className="text-xs min-h-[20px] text-[#F5C037] px-1"
-                            >
-                              <span className="text-shadow-lg [text-shadow:1px_1px_2px_black]">
-                                {truncateWords(item.category, 3)}
-                              </span>
-                            </Link>
-                          </div>
+  <Link
+    to={`/vip-number/${item.number}`}
+    className="text-xs min-h-[20px] text-[#F5C037] px-1 whitespace-nowrap overflow-hidden text-ellipsis"
+  >
+    <span className="text-shadow-lg [text-shadow:1px_1px_2px_black]">
+      {truncateWords(item.category, 3)}
+    </span>
+  </Link>
+</div>
+
                         </div>
 
-                        <div className="relative flex justify-between items-center gap-2 w-full text-xs sm:text-sm p-2">
-                          <Link
-                            to={`/vip-number/${item.number}`}
-                            className="text-center text-sm sm:text-xl font-semibold text-[rgb(22,59,62)]"
-                          >
-                            <p>₹ {item.roundedFinalPrice.toLocaleString("en-IN")}</p>
-                            {item.owner?.discount > 0 && (
-                              <p className="relative text-nowrap text-xs md:text-sm font-semibold text-black opacity-50 px-2 py-0.5 md:py-1 rounded-full">
-                                ₹ <span className="line-through">{item.roundedOriginalPrice.toLocaleString("en-IN")}</span>
-                              </p>
-                            )}
-                          </Link>
+                        <div className="flex justify-between items-center w-full text-xs sm:text-sm p-2">
 
-                          <button
-                            aria-label={"Add to Cart"}
-                            className="text-nowrap font-semibold px-4 py-1 w-1/2 max-h-8 justify-center rounded-full border-2 border-[#F5C037] text-[#17535D] hover:bg-white hover:border-[#17535D] hover:text-[#17535D] transition-all duration-300 ease-in-out flex items-center gap-2 shadow-md"
-                            style={{ background: "linear-gradient(180deg, #eba800ff, #f0cd75ff, #eba800ff)" }}
-                            onClick={() => {
-                              handleAddToCart(item);
-                              navigate("/checkout");
+  {/* LEFT — PRICE */}
+  <Link
+    to={`/vip-number/${item.number}`}
+    className="text-left text-sm sm:text-xl font-semibold text-[rgb(22,59,62)]"
+  >
+    <p>₹ {item.roundedFinalPrice.toLocaleString("en-IN")}</p>
 
-                            }}
-                          >
-                            Book Now
-                          </button>
-                        </div>
-                      </div>
+    {item.owner?.discount > 0 && (
+      <p className="text-nowrap text-xs md:text-sm font-semibold text-black opacity-50">
+        ₹ <span className="line-through">
+          {item.roundedOriginalPrice.toLocaleString("en-IN")}
+        </span>
+      </p>
+    )}
+  </Link>
+
+  {/* RIGHT — BOOK NOW */}
+  <button
+    aria-label="Add to Cart"
+    className="text-nowrap font-semibold px-4 py-1 rounded-full border-2 border-[#F5C037] 
+               text-[#17535D] hover:bg-white hover:border-[#17535D] hover:text-[#17535D] 
+               transition-all duration-300 ease-in-out flex items-center gap-2 shadow-md"
+    style={{
+      background: "linear-gradient(180deg, #eba800ff, #f0cd75ff, #eba800ff)",
+    }}
+    onClick={(e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      handleAddToCart(item);
+      navigate("/checkout");
+    }}
+  >
+    Book Now
+  </button>
+
+</div>
+
+                    </div>
                     </div>
                      </Link>
                   </SwiperSlide>
-                ))
+                  );
+                })
               )}
             </Swiper>
 

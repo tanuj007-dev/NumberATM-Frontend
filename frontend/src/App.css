@@ -17,6 +17,11 @@
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
+/* Add space ABOVE pagination dots */
+ 
+
+/* If you want space BELOW dots instead */
+ 
 
 @keyframes logo-spin {
   from {

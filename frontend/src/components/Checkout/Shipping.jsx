@@ -324,19 +324,23 @@ useEffect(() => {
                 }`}
               />
 
-              <input
-                type="number"
-                name="pincode"
-                placeholder="Pincode*"
-                value={formData.pincode}
-                onChange={(e) => {
-                  if (e.target.value.length > 6) return;
-                  handleChange(e);
-                }}
-                className={`w-full md:col-span-2 p-3 border rounded-md bg-white text-black ${
-                  invalidFields.includes("pincode") ? "border-red-500" : ""
-                }`}
-              />
+             <input
+  type="tel"
+  inputMode="numeric"
+  name="pincode"
+  placeholder="Pincode*"
+  value={formData.pincode}
+  onChange={(e) => {
+    const value = e.target.value.replace(/\D/g, ""); // only digits
+    if (value.length <= 6) {
+      handleChange({ target: { name: "pincode", value } });
+    }
+  }}
+  className={`w-full md:col-span-2 p-3 border rounded-md bg-white text-black ${
+    invalidFields.includes("pincode") ? "border-red-500" : ""
+  }`}
+/>
+
 
               <div className="relative md:col-span-2">
                 <FaPhone className="rotate-90 absolute left-3 top-4 text-gray-500" />

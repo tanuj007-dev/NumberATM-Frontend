@@ -146,8 +146,8 @@ const removePopupUI = () => (
                   <tr className="bg-[#F5C037] text-[#17565D]">
                     <th className="p-3 border-b">VIP Number</th>
                     <th className="p-3 border-b">Price</th>
-                    <th className="p-3 border-b">Discount</th>
-                    <th className="p-3 border-b">Discounted Price</th>
+                  
+                   
                     <th className="p-3 border-b">Available</th>
                     <th className="p-3 border-b">Action</th>
                   </tr>
@@ -167,11 +167,9 @@ const removePopupUI = () => (
                           ₹{original?.toLocaleString("en-IN")}
                         </td>
 
-                        <td className="p-3">{discount}%</td>
+                        
 
-                        <td className="p-3">
-                          ₹{final?.toLocaleString("en-IN")}
-                        </td>
+                       
 
                         <td className="p-3 flex justify-center">
                           {num.stock !== 0 ? (
@@ -230,17 +228,9 @@ const removePopupUI = () => (
                       <span>₹{original?.toLocaleString("en-IN")}</span>
                     </div>
 
-                    <div className="flex justify-between mt-1">
-                      <span className="text-gray-500">Discount</span>
-                      <span>{discount}%</span>
-                    </div>
+                  
 
-                    <div className="flex justify-between mt-1">
-                      <span className="text-gray-500">Discounted Price</span>
-                      <span className="text-green-600 font-semibold">
-                        ₹{final?.toLocaleString("en-IN")}
-                      </span>
-                    </div>
+                   
 
                     <div className="flex justify-between mt-2">
                       <span className="text-gray-500">Available</span>
@@ -251,7 +241,8 @@ const removePopupUI = () => (
                       )}
                     </div>
 
-                    <div className="flex justify-end mt-2">
+                    <div className="flex justify-between mt-2">
+                       <span className="text-gray-500">Action</span>
                       <button
                         type="button"
                         onClick={() => {
@@ -300,10 +291,10 @@ const removePopupUI = () => (
                 <IoIosLock className="text-green-600 text-xl" />
               </div>
 
-              <div className="flex justify-between text-gray-700 mb-3">
-                <span>Items</span>
-                <span>{cart?.length}</span>
-              </div>
+             <div className="flex justify-between text-gray-700 mb-3">
+  <span>Items</span>
+  <span>{cart?.length}</span>
+</div>
 
               <div className="flex justify-between text-gray-700 mb-3">
                 <span>Subtotal</span>
@@ -356,26 +347,13 @@ const removePopupUI = () => (
 {showRemovePopup && removePopupUI()}
 
                {/* Trust Badges */}
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <div className="flex items-center justify-center gap-5 flex-wrap">
-                    <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg"
-                      alt="Stripe"
-                      className="h-6 opacity-80"
-                    />
-                    <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg"
-                      alt="Razorpay"
-                      className="h-6 opacity-80"
-                    />
-                  </div>
-                </div>
+              
             </div>
           </div>
         </div>
       )}
          {/* TRUST BADGES & SECURITY SECTION */}
-        <div className="w-full mt-8 bg-[#E4F0EE] rounded-xl p-6 border border-blue-100">
+        {/* <div className="w-full mt-8 bg-[#E4F0EE] rounded-xl p-6 border border-blue-100">
           <h3 className="text-center text-lg font-semibold text-[#17565D] mb-6">
         Your Trusted VIP Number Partner
           </h3>
@@ -483,7 +461,7 @@ const removePopupUI = () => (
           </Swiper>
 
           {/* Additional Trust Indicators */}
-          <div className="mt-6 pt-6 border-t border-[#17565D]">
+          {/* <div className="mt-6 pt-6 border-t border-[#17565D]">
             <div className="flex flex-wrap justify-center items-center gap-6">
               <div className="flex items-center gap-2 text-sm text-gray-700">
                 <FaCheckCircle className="text-[#17565D]" />
@@ -498,8 +476,8 @@ const removePopupUI = () => (
                 <span>Instant Activation</span>
               </div>
             </div>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */} 
     </div>
   );
 }

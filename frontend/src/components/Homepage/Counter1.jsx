@@ -21,7 +21,7 @@ export default function StatsCounter() {
 >
   <div className="relative w-full py-8 sm:py-16 bg-[#17565DE6]">
 
-    <h1 class="text-xl sm:text-3xl font-semibold text-center text-white px-4 [text-shadow:2px_2px_2px_#000]">
+    <h1 className="text-xl sm:text-3xl font-semibold text-center text-white px-4 [text-shadow:2px_2px_2px_#000]">
       We provide these vanity phone numbers to:
     </h1>
 

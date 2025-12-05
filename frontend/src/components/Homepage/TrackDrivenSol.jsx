@@ -63,7 +63,7 @@ const IconBackground = ({ children, colorClass }) => (
 const FeatureCard = ({ iconBgColor, icon, title, children }) => (
   <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
     <div className="flex items-start gap-4 mb-4">
-      <IconBackground colorClass={iconBgColor}>
+      <IconBackground colorClassName={iconBgColor}>
         {/* Placeholder Icon - replace with a real icon library component */}
         <div className="w-6 h-6 bg-white opacity-80 rounded-sm"></div>
       </IconBackground>

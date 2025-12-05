@@ -16,7 +16,7 @@ const AnimatedNumberLink = ({}) => {
     <Link
       to="https://wa.me/+919511195111"
       target="_blank"
-      className="relative inline-flex px-1 font-semibold text-white transition duration-300 transform hover:scale-105"
+      className="relative inline-flex px-1 font-semibold text-sm sm:text-lg md:text-xl text-white transition duration-300 transform hover:scale-105"
     >
       <span className="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 rounded-full opacity-100 blur-lg animate-pulse -z-10" />
       {text.split("").map((char, i) => (

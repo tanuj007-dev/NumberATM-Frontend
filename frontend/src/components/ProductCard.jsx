@@ -400,7 +400,7 @@ const ProductCard = ({ item, searchTerm = "" }) => {
 
   const highlighterSearch = (num, searchTerm) => {
     if (!searchTerm || !num.includes(searchTerm)) return num;
-    const highlightedSearchTerm = `<span class="text-orange-500 mx-1.5 font-bold">${searchTerm}</span>`;
+    const highlightedSearchTerm = `<span className="text-orange-500 mx-1.5 font-bold">${searchTerm}</span>`;
     const result = num.replace(
       new RegExp(searchTerm, "g"),
       highlightedSearchTerm

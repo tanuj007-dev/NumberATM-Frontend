@@ -66,6 +66,40 @@ export default function Review({
   // helper formatting (used in UI displays)
   const formatINR = (val) => `₹${Number(val).toLocaleString("en-IN")}`;
 
+  const fullName = [formData.firstName, formData.lastName].filter(Boolean).join(" ").trim() || "-";
+  const contactEmail = formData.email || "-";
+  const phoneNumber = formData.phone || "-";
+  const addressLine = formData.streetAddress || "-";
+  const locationLine = [formData.city, formData.state, formData.pincode].filter(Boolean).join(", ") || "-";
+
+  const shippingInfo = [
+    {
+      icon: FaUser,
+      label: "Contact Person",
+      helper: "Full Name",
+      value: fullName,
+    },
+    {
+      icon: FaEnvelope,
+      label: "Email",
+      helper: "Primary Email",
+      value: contactEmail,
+    },
+    {
+      icon: FaPhone,
+      label: "Phone",
+      helper: "Active Number",
+      value: phoneNumber,
+    },
+    {
+      icon: FaMapMarkerAlt,
+      label: "Delivery Address",
+      helper: locationLine,
+      value: addressLine,
+      variant: "accent",
+    },
+  ];
+
   return (
     <div className="w-full min-h-screen bg-white px-1 sm:px-2 md:px-4 lg:px-6">
       {/* Grid: Left (form/summary) 2 cols, Right sidebar 1 col */}
@@ -99,7 +133,7 @@ export default function Review({
             </div>
 
             {/* Payment Icons (UI only) */}
-            <div className="flex items-center flex-wrap gap-4 justify-center sm:justify-start p-3 bg-gray-50 rounded-lg">
+            <div className="flex items-center flex-wrap gap-4 justify-center sm:justify-end p-3 bg-gray-50 rounded-lg">
               <span className="text-xs text-gray-600 font-medium">Accepted Payments:</span>
               <img src={upi} className="h-6 sm:h-8 object-contain" alt="UPI" />
               <img src="https://www.electronicpaymentsinternational.com/wp-content/uploads/sites/4/2021/11/1280px-Rupay-Logo.png" className="h-6 sm:h-8 object-contain" alt="RuPay" />
@@ -113,7 +147,7 @@ export default function Review({
             {/* Order Summary (table) */}
             <div className="rounded-lg border border-gray-100 mb-4">
               <div className="px-3 py-2 bg-gray-50 border-b flex justify-between">
-                <h3 className="text-sm sm:text-base font-medium text-gray-800">Order Summary</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900">Order Summary</h3>
                 <span className="text-xs sm:text-sm text-gray-600">
                   {cart.length} item{cart.length > 1 ? "s" : ""}
                 </span>
@@ -178,61 +212,50 @@ export default function Review({
               </div>
             </div>
 
-            {/* Shipping Details — uses Code-1 content / fields (kept same) */}
-            <div className="rounded-lg border border-gray-100 p-3 sm:p-4 bg-white mb-4">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-base font-medium text-gray-800">Shipping Details</h3>
-                <div className="flex items-center gap-1">
-                  <img src="https://cdn-icons-png.flaticon.com/512/5290/5290058.png" className="w-4 h-4" alt="verified" />
-                  <span className="text-green-600 text-xs font-medium">Verified</span>
+            {/* Shipping Details — refreshed UI */}
+            <div className="rounded-2xl border border-gray-100 p-4 sm:p-6 mb-4 shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
+                <div>
+                  <p className="text-lg sm:text-xl font-bold text-gray-900">Shipping Details</p>
+ 
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-green-100 shadow-sm">
+                  <FaCheckCircle className="text-green-600 text-sm" />
+                  <span className="text-xs font-semibold text-green-700">Verified</span>
                 </div>
               </div>
 
-              <div className="space-y-2.5 text-xs sm:text-sm">
-                <div className="flex gap-2">
-                  <FaUser className="text-gray-500 mt-0.5" />
-                  <div>
-                    <p className="font-medium text-gray-900">{formData.firstName} {formData.lastName}</p>
-                    <p className="text-gray-500">Full Name</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {shippingInfo.map(({ icon: Icon, label, helper, value, variant }) => (
+                  <div
+                    key={label}
+                    className={`flex items-start gap-3 rounded-2xl border px-3 py-3 shadow-[0_3px_12px_rgba(23,86,93,0.06)] ${
+                      variant === "accent"
+                        ? "border-[#ffffff]/70 bg-white/70"
+                        : "border-gray-100 bg-white/70"
+                    }`}
+                  >
+                    <div
+                      className={`flex items-center justify-center rounded-full w-10 h-10 ${
+                        variant === "accent"
+                          ? " text-[#17565D]"
+                          : " text-[#17565D]"
+                      }`}
+                    >
+                      <Icon />
+                    </div>
+                    <div>
+                      <p className="text-[11px] uppercase tracking-wide text-gray-500">{label}</p>
+                      <p className="text-base font-semibold text-gray-900 leading-tight">{value}</p>
+                      <p className="text-xs text-gray-500">{helper}</p>
+                    </div>
                   </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <FaEnvelope className="text-gray-500 mt-0.5" />
-                  <div>
-                    <p className="font-medium text-gray-900">{formData.email}</p>
-                    <p className="text-gray-500">Email</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <FaPhone className="text-gray-500 mt-0.5" />
-                  <div>
-                    <p className="font-medium text-gray-900">{formData.phone}</p>
-                    <p className="text-gray-500">Phone</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <FaMapMarkerAlt className="text-gray-500 mt-0.5" />
-                  <div>
-                    <p className="font-medium text-gray-900">{formData.streetAddress}</p>
-                    <p className="text-gray-500">{formData.city}, {formData.state}</p>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
             {/* Security Notice (from Code-2) */}
-            <div className="hidden sm:block mt-4 p-4 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg border border-blue-200">
-              <div className="flex items-start gap-3">
-                <IoIosLock className="text-2xl text-blue-600 flex-shrink-0 mt-1" />
-                <div>
-                  <h4 className="font-semibold text-gray-800 text-sm">Your Payment is Secure</h4>
-                  <p className="text-xs text-gray-600 mt-1">We use 256-bit SSL encryption and comply with PCI DSS standards to ensure your payment information is completely secure.</p>
-                </div>
-              </div>
-            </div>
+           
 
             {/* Buttons (keeps Code-1 checkout call and behavior) */}
             <div className="hidden sm:flex justify-between mt-6 gap-4">
@@ -273,21 +296,7 @@ export default function Review({
         {/* RIGHT SIDE — Full Code-2 sidebar REUSED (UI only) */}
         <div className="space-y-4 sticky top-24">
           {/* Security Badge Card */}
-          <div className="bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-200 rounded-xl p-5 shadow-lg">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 bg-[#F5C037] rounded-full flex items-center justify-center shadow-md">
-                <IoIosLock className="text-[#17565D] md:text-2xl" />
-              </div>
-              <div>
-                <h3 className="font-bold text-sm sm:text-lg md:text-xl text-[#17565D]">Secure Payment</h3>
-                <p className="text-xs text-gray-600">256-bit SSL Encrypted</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 text-xs text-green-800 bg-white/60 rounded-lg p-2">
-              <FaCheckCircle className="text-green-600" />
-              <span className="font-medium">PCI DSS Level 1 Certified</span>
-            </div>
-          </div>
+          
 
           {/* Trust Indicators Card */}
           <div className="bg-white border-2 border-gray-200 rounded-xl shadow-md overflow-hidden">
@@ -376,31 +385,10 @@ export default function Review({
           </div>
 
           {/* Money Back Guarantee */}
-          <div className="bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-xl p-4 shadow-md">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
-                <span className="text-2xl">💰</span>
-              </div>
-              <div>
-                <h4 className="font-bold text-gray-900">Money-Back Guarantee</h4>
-                <p className="text-xs text-gray-600">100% Refund if unsatisfied</p>
-              </div>
-            </div>
-            <p className="text-xs text-gray-700 leading-relaxed">If we can't deliver your VIP number, we'll process a full refund within 24 hours. No questions asked.</p>
-          </div>
+        
 
           {/* Payment Logos */}
-          <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-            <p className="text-xs text-gray-600 text-center mb-3 font-medium">Secured By</p>
-            <div className="flex items-center justify-center gap-4 flex-wrap">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" alt="Stripe" className="h-6 opacity-70" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" alt="Razorpay" className="h-6 opacity-70" />
-            </div>
-            <div className="flex items-center justify-center gap-2 mt-3 text-xs text-gray-600">
-              <IoIosLock className="text-green-600" />
-              <span>SSL Secured Connection</span>
-            </div>
-          </div>
+              
         </div>
       </div>
 

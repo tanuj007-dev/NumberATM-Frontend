@@ -20,51 +20,52 @@ const VipNumberCard = ({ category, num, number, price }) => {
         return { sum1: sumOfDigits, sum2: sumOfResultingDigits, sum3: finalSum };
     };
     return (
-        <div onClick={() => navigate(`/vip-number/${num.number}`)} className="relative w-full text-nowrap min-w-full max-w-sm bg-black text-white flex rounded-0 shadow-lg overflow-hidden">
-            {/* Woman Image on the Left Side */}
+        <></>
+        // <div onClick={() => navigate(`/vip-number/${num.number}`)} className="relative w-full text-nowrap min-w-full max-w-sm bg-black text-white flex rounded-0 shadow-lg overflow-hidden">
+        //     {/* Woman Image on the Left Side */}
 
-            <div className="w-1/3">
-                <img
-                    src={womanSmiling}
-                    alt="Woman Smiling"
-                    className="h-full absolute -left-10 top-16 w-full z-50 object-contain"
-                />
-            </div>
+        //     {/* <div className="w-1/3">
+        //         <img
+        //             src={womanSmiling}
+        //             alt="Woman Smiling"
+        //             className="h-full absolute -left-10 top-16 w-full z-50 object-contain"
+        //         />
+        //     </div> */}
 
-            {/* Right Side Content */}
-            <div className="w-3/4 p-6 px-4 flex flex-col justify-center items-center text-center">
-                {/* VIP Header Section */}
-                <div className="text-yellow-400 text-sm font-bold">
-                    <div className="flex items-center text-nowrap justify-center gap-0.5">
-                        <span className="text-[1rem]">📞</span>
-                        <p >VIP Numbers Ashish Yadav</p>
-                    </div>
-                    <p className="mt-0.5">95111-95111</p>
-                </div>
+        //     {/* Right Side Content */}
+        //     <div className="w-3/4 p-6 px-4 flex flex-col justify-center items-center text-center">
+        //         {/* VIP Header Section */}
+        //         <div className="text-yellow-400 text-sm font-bold">
+        //             <div className="flex items-center text-nowrap justify-center gap-0.5">
+        //                 <span className="text-[1rem]">📞</span>
+        //                 <p >VIP Numbers Ashish Yadav</p>
+        //             </div>
+        //             <p className="mt-0.5">95111-95111</p>
+        //         </div>
 
-                {/* Main Content */}
-                <div className="mt-6">
-                    {/* <p className="text-lg lg:text-xl  font-semibold">{category?.[0]||category}</p> */}
-                    <p className=" text-xl lg:text-3xl font-bold mt-3">{number}</p>
-                    <p className="text-xs ml-12 mt-3">SUM TOTAL <span className="font-semibold">
-                        {calculateSums(num?.number)?.sum1} - {calculateSums(num?.number)?.sum2} -{" "}
-                        {calculateSums(num?.number)?.sum3}
-                    </span></p>
-                    <p className="text-lg lg:text-2xl  font-medium text-yellow-400 ml-10 mt-3">{price}</p>
-                </div>
+        //         {/* Main Content */}
+        //         <div className="mt-6">
+        //             {/* <p className="text-lg lg:text-xl  font-semibold">{category?.[0]||category}</p> */}
+        //             <p className=" text-xl lg:text-3xl font-bold mt-3">{number}</p>
+        //             <p className="text-xs ml-12 mt-3">SUM TOTAL <span className="font-semibold">
+        //                 {calculateSums(num?.number)?.sum1} - {calculateSums(num?.number)?.sum2} -{" "}
+        //                 {calculateSums(num?.number)?.sum3}
+        //             </span></p>
+        //             <p className="text-lg lg:text-2xl  font-medium text-yellow-400 ml-10 mt-3">{price}</p>
+        //         </div>
 
-                {/* Book Now Button */}
-                <button className="mt-3 w-3/4 ml-4 bg-pink-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:bg-pink-700">
-                    BOOK NOW
-                </button>
+        //         {/* Book Now Button */}
+        //         <button className="mt-3 w-3/4 ml-4 bg-pink-600 text-white py-1.5 px-3 rounded-lg font-semibold hover:bg-pink-700">
+        //             BOOK NOW
+        //         </button>
 
-                {/* Contact Info */}
-                <div className="text-yellow-400 mt-4 text-sm">
-                    <p>95111 95111</p>
-                    <p className="text-xs">NUMBERATM.COM</p>
-                </div>
-            </div>
-        </div>
+        //         {/* Contact Info */}
+        //         <div className="text-yellow-400 mt-4 text-sm">
+        //             <p>95111 95111</p>
+        //             <p className="text-xs">NUMBERATM.COM</p>
+        //         </div>
+        //     </div>
+        // </div>
     );
 };
 

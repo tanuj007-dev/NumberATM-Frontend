@@ -133,14 +133,10 @@ const FavoriteVIPNumbers = ({}) => {
                   >
                     {/* Top Row: Timer + Heart + Sum Total */}
                     <div className="flex justify-between items-center text-xs mb-2 md:mb-3">
-                      <div className="rounded-full bg-[#1d4a46] border-2 border-[#CE9E3E] px-1.5 md:px-2 py-0.5 text-white text-[8px] md:text-[10px]">
-                        01:36:31 Left
-                      </div>
+                       
 
                       <div className="flex items-center gap-1 md:gap-2">
-                        <span className="text-base md:text-xl text-gray-500">
-                          <BsCart4 />
-                        </span>
+                       
                         <span className="text-[10px] md:text-sm font-semibold text-gray-700">
                           | Sum Total {item.sum || ""}
                         </span>
@@ -150,14 +146,14 @@ const FavoriteVIPNumbers = ({}) => {
                     {/* Number Box */}
                     <div
                       onClick={() => navigate(`/vip-number/${item.number}`)}
-                      className="w-full bg-gradient-to-b from-[#073B3A] to-[#0A292C] text-yellow-300 rounded-lg md:rounded-xl text-center p-1.5 md:p-2 cursor-pointer"
+                      className="w-full bg-gradient-to-b text-nowrap  from-[#073B3A] to-[#0A292C] text-yellow-300 rounded-lg md:rounded-xl text-center p-1.5 md:p-2 cursor-pointer"
                       style={{
                         background:
                           "linear-gradient(90deg, rgb(19,52,55),rgb(44,106,108), rgb(19,52,55))",
                       }}
                     >
                       <p
-                        className="text-xl md:text-3xl font-bold tracking-wider"
+                        className="text-sm md:text-3xl font-bold tracking-tight "
                         style={{
                           textShadow:
                             "2px 2px 4px #000000, 0 0 6px rgba(0,0,0,0.4)",
@@ -202,7 +198,7 @@ const FavoriteVIPNumbers = ({}) => {
                       {/* Book Now Button */}
                       <button
                         onClick={() => navigate(`/vip-number/${item.number}`)}
-                        className="text-xs md:text-sm flex-1 md:w-32 font-semibold px-3 md:px-5 py-1.5 md:py-2 rounded-full text-[#17535D] border-2 border-[#F5C037]"
+                        className="text-xs md:text-sm flex-1 md:w-32  font-semibold px-2 md:px-3 py-1.5 md:py-2 rounded-full text-[#17535D] border-2 border-[#F5C037]"
                         style={{
                           background:
                             "linear-gradient(180deg, #eba800, #f0cd75, #eba800)",

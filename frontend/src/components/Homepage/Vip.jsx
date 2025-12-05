@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import vipimg from "../assets/vid.jpg";
+import vipimg from "../../assets/vid1.png";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
@@ -55,7 +55,7 @@ const limitHtmlWords = (html, maxWords) => {
 
 
   return (
-    <div className="py-6 sm:py-12 bg-[url(./assets/img1.png)] bg-cover bg-center">
+    <div className="py-3 sm:py-12 bg-[url(./assets/img1.png)] bg-cover bg-center">
       {/* Heading */}
       <h2 className="text-[#17565D] text-center font-semibold text-xl sm:text-3xl">
         Get Our Latest <span className="text-[#F5C037]">Vip Numbers News</span>
@@ -84,12 +84,13 @@ const limitHtmlWords = (html, maxWords) => {
           </p>
         )}
 
+ 
         {/* Swiper Slider */}
         {!loading && vipCards.length > 0 && (
           <Swiper
-            modules={[Autoplay, Navigation, Pagination]}
+            modules={[Autoplay, Navigation, ]}
             navigation={{ prevEl: ".prev-pl", nextEl: ".next-pl" }}
-            pagination={{ clickable: true }}
+            // pagination={{ clickable: true }}
             autoplay={{ delay: 3000, disableOnInteraction: true }}
             spaceBetween={20}
             loop={true}
@@ -110,36 +111,40 @@ const limitHtmlWords = (html, maxWords) => {
           >
             {vipCards.map((item, index) => (
               <SwiperSlide key={index}>
-                <div className="w-full shadow-[0px_3px_8px_rgba(0,0,0,0.24)] rounded-2xl overflow-hidden bg-white mb-6">
+                <Link
+                  to={`/vip-numbers/${slugify(item.title)}`}
+                  className="block h-full"
+                >
+                  <article className="w-full h-full flex flex-col shadow-[0px_3px_8px_rgba(0,0,0,0.24)] rounded-2xl overflow-hidden bg-white">
 
-                  {/* Dynamic Image */}
-                  <img
-                    src={item.imageUrl ? item.imageUrl : vipimg}
-                    alt="VIP"
-                    className="w-full h-40 object-cover"
-                  />
+                    {/* Fixed-height image */}
+                    <div className="w-full h-48 sm:h-52 flex-shrink-0">
+                      <img
+                        src={item.imageUrl ? item.imageUrl : vipimg}
+                        alt="VIP"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
 
-                  {/* Content */}
-                  <div className="p-3">
-                    <h3 className="text-black font-semibold text-base sm:text-xl text-center px-3">
-                     {limitHtmlWords(item.title, 6)} 
-                    </h3>
+                    {/* Fixed-height content area */}
+                    <div className="flex flex-col flex-1 p-4 gap-2 min-h-[180px]">
+                      <h3 className="text-black font-semibold text-base sm:text-lg leading-snug line-clamp-2 h-[2.5em] overflow-hidden">
+                        {limitHtmlWords(item.title, 16)}
+                      </h3>
 
-                 <p className="text-[#666666] text-xs sm:text-sm text-center px-3 mb-3">
-  {limitHtmlWords(item.content, 4)}  
-  
-</p>
+                      <p className="text-[#666666] text-sm leading-relaxed line-clamp-3 flex-1 overflow-hidden">
+                        {limitHtmlWords(item.content, 30)}
+                      </p>
 
-
-                   <Link
-  to={`/vip-numbers/${slugify(item.title)}`}
-  className="bg-[#17565D] text-white px-4 py-1 mx-auto block rounded-full text-center hover:bg-[#F5C037] hover:text-[#17565D] transition"
->
-  Read More
-</Link>
-
-                  </div>
-                </div>
+                      {/* Fixed-height CTA footer */}
+                      <div className="h-[1.25em] flex items-start">
+                        <span className="text-xs text-[#17565D] font-semibold tracking-wide">
+                          Read more →
+                        </span>
+                      </div>
+                    </div>
+                  </article>
+                </Link>
               </SwiperSlide>
             ))}
           </Swiper>

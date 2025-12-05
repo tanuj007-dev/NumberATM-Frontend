@@ -91,10 +91,7 @@ export default function FAQ1() {
       Frequently Asked Questions (FAQ)
     </h2>
 
-    <p className="md:text-lg text-md mb-4 text-gray-700">
-      Can't find the answer here? Check out our{" "}
-      <span className="underline underline-offset-8">Help Center.</span>
-    </p>
+  
 
     <div className="space-y-3 md:space-y-4">
       {faqs.map((faq, index) => (

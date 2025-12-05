@@ -9,7 +9,7 @@ import UserAxiosAPI from "../../api/userAxiosAPI";
 import { MdOutlineCurrencyRupee, MdOutlinePriceChange, MdOutlineSavedSearch } from "react-icons/md";
 import toast from "react-hot-toast";
 import AnimatedNumberLink from "../AnimatedNumber";
-
+import { FaSearchPlus } from "react-icons/fa";
 const categories = [
   { name: "Numerology Without 2 4 8", count: 10528 },
   { name: "PENTA NUMBERS", count: 372 },
@@ -285,19 +285,27 @@ const SearchComponent = ({
 
       {!seprate && filters.category === "" && (
         <div className="flex justify-center space-x-4 mb-4">
-          <button
-                    className={`${activeTab === 'digits' ? 'bg-[#F5C037] text-black border-none' : 'border-white bg-transparent text-white'}  text-xs sm:text-lg px-4 md:px-5 py-2 rounded-full border-[0.6px] border-white hover:border-white flex items-center gap-2`}
-                    onClick={() => handleSearchByTab("digits")}
-                >
-           <FaRegHandPointer />  Search by Digits
-          </button>
-          <button
-                    className={`${activeTab === 'price' ? 'bg-[#F5C037] text-black border-none' : 'border-white bg-transparent text-white'}  text-xs sm:text-lg px-4 md:px-5 py-2 rounded-full border-[0.6px] border-white hover:border-white flex items-center gap-2`}
-                    onClick={() => handleSearchByTab("price")}
-                >
-                    <MdOutlineCurrencyRupee />  Search by Price
-                </button>
-        </div>
+  <button
+    className={`${activeTab === 'digits'
+        ? 'bg-[#F5C037] text-black border-none'
+        : 'border-white bg-transparent text-white'
+      } whitespace-nowrap text-[10px] sm:text-sm md:text-lg px-4 md:px-5 py-2 rounded-full border-[0.6px] border-white hover:border-white flex items-center gap-2`}
+    onClick={() => handleSearchByTab("digits")}
+  >
+    <FaRegHandPointer /> Search by Digits
+  </button>
+
+  <button
+    className={`${activeTab === 'price'
+        ? 'bg-[#F5C037] text-black border-none'
+        : 'border-white bg-transparent text-white'
+      } whitespace-nowrap text-[10px] sm:text-sm md:text-lg px-4 md:px-5 py-2 rounded-full border-[0.6px] border-white hover:border-white flex items-center gap-2`}
+    onClick={() => handleSearchByTab("price")}
+  >
+    <MdOutlineCurrencyRupee /> Search by Price
+  </button>
+</div>
+
       )}
 
       {activeTab === "digits" ? (
@@ -342,6 +350,7 @@ const SearchComponent = ({
             
           )} */}
 {/* MOBILE UI – shown only below 640px */}
+{filters.category === "" && (
 <div className="block sm:hidden mb-4">
 
   {/* 🔶 Row 1 : Start / Anywhere / Ends */}
@@ -400,8 +409,10 @@ const SearchComponent = ({
   </div>
 
 </div>
+)}
 
 {/* DESKTOP UI – original (kept exactly as your UI) */}
+{filters.category === "" && (
 <div className="hidden sm:flex w-full items-center px-2 mb-4 justify-between">
 
   {/* LEFT – Start/Any/End */}
@@ -462,7 +473,8 @@ const SearchComponent = ({
 
 </div>
 
-          
+)}
+
         {filters.category === "" && subTab === "premium" && (
           
   <div className="w-full relative">
@@ -777,101 +789,85 @@ const SearchComponent = ({
       )}
 
       <div className="flex justify-center flex-wrap gap-2 md:gap-4 mt-4">
-        <div className="flex justify-between">
-          {/* <select
-            value={filters.category}
-            aria-label="Choose category"
-            onChange={(e) => {
-              setFilters({ category: e.target.value });
-            }}
-            className="bg-[#274A7B] w-1/2 md:hidden text-white px-2.5 py-2 rounded-lg border-[0.6px] border-white hover:bg-orange-500 hover:text-white focus:outline-none cursor-pointer"
+  <div className="flex justify-between w-full">
+    <select
+      value={filters.category}
+      aria-label="Choose category"
+      onChange={(e) => {
+        setFilters({ category: e.target.value });
+      }}
+      className="bg-[#17565D] w-1/2 md:hidden text-white text-xs px-2 py-2 rounded-lg border-[0.6px] border-white hover:bg-[#F5C037] hover:text-[#17565D] focus:outline-none cursor-pointer"
+    >
+      <option value="">All Categories</option>
+      {categories?.map((category, idx) => {
+        return (
+          <option
+            key={idx}
+            className="bg-white text-black"
+            value={category.name}
           >
-            <option value="">All Categories</option>
-            {categories?.map((category, idx) => {
-              return (
-                <option
-                  key={idx}
-                  className="bg-white text-black"
-                  value={category.name}
-                >
-                  {category.name}
-                </option>
-              );
-            })}
-          </select> */}
-          {/* <input
-            inputMode="numeric"
-            placeholder="Sum Total"
-            value={filters.anySum}
-            onWheel={(e) => e.target.blur()}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (/^\d{0,2}$/.test(value)) {
-                setFilters({ ...filters, anySum: value });
-              }
-            }}
-            className="py-2 px-4 w-[48%] md:hidden rounded-lg border-[0.5px] border-white bg-[#274A7B] text-white focus:outline-none"
-          /> */}
-        </div>
-        {filters.category === "" && (
-          <div className="flex justify-center pt-2 sm:pt-0 gap-2">
-            {/* <button
-              onClick={(e) => {
-                e.preventDefault();
-                setPage(1);
-                handleSearch();
-              }}
-              className="bg-[#274A7B] text-white px-12 py-2 rounded-full border-[0.6px] border-white hover:bg-orange-500 focus-visible:border-0 hover:text-white hover:border-[#274A7B] flex items-center gap-2"
-            >
-              <span>Search</span>
-            </button> */}
+            {category.name}
+          </option>
+        );
+      })}
+    </select>
 
- <div className="flex text-lg md:text-xl justify-center mb-4 items-center gap-2">
-         <span className="text-white text-[15px] sm:text-[18px]  md:text-[20px] font-semibold"> Need Help?</span>  
-            <a
-              href="https://wa.me/+919511195111"
-              target="_blank"
-              aria-label="Whatsapp"
-              rel="noopener noreferrer"
-              className="bg-green-500 text-white p-0 z-[100] rounded-full shadow-lg hover:bg-green-600 hover:text-white transition"
-            >
-              <FaWhatsapp className="text-xl md:text-2xl" />
-            </a>
-             
-            <span className="font-semibold min-h-[30px]">
-              <AnimatedNumberLink />
-            </span>
-          </div>
-            {/* <button
-              type="button"
-              onClick={() => {
-                setSearchParams("");
-                setFilteredNumbers(numbers);
-                setExactDigits(Array(10).fill(""));
-                setFilters({
-                  startWith: false,
-                  endsWith: false,
-                  contains: true,
-                  startsWithDigits: "",
-                  endsWithDigits: "",
-                  searchInput: "",
-                  mustContain: "",
-                  mustNotContain: "",
-                  minPrice: 0,
-                  maxPrice: 0,
-                  sortType: "",
-                  category: "",
-                  exactPlace: "",
-                });
-                window.location.reload();
-              }}
-              className="bg-[#274A7B] text-white px-12 py-2 rounded-full border-[0.6px] border-white hover:bg-orange-500 focus-visible:border-0 hover:text-white hover:border-[#274A7B] flex items-center gap-2"
-            >
-              <span>Reset</span>
-            </button> */}
-          </div>
-        )}
+    <input
+      inputMode="numeric"
+      placeholder="Sum Total"
+      value={filters.anySum}
+      onWheel={(e) => e.target.blur()}
+      onChange={(e) => {
+        const value = e.target.value;
+        if (/^\d{0,2}$/.test(value)) {
+          setFilters({ ...filters, anySum: value });
+        }
+      }}
+      className="py-2 px-4 w-[48%] md:hidden text-xs rounded-lg border-[0.5px] border-white bg-[#17565D] text-white focus:outline-none"
+    />
+  </div>
+
+  {filters.category === "" && (
+    <div className="flex flex-col md:flex-row justify-center items-center pt-2 sm:pt-0 gap-4 w-full">
+
+      {/* ⭐ SEARCH BUTTON ON TOP FOR MOBILE */}
+     
+<button
+  onClick={(e) => {
+    e.preventDefault();
+    setPage(1);
+    handleSearch();
+  }}
+  className="flex items-center justify-center gap-2 md:hidden bg-[#F5C037] text-black px-4 py-1 rounded-full border-[0.6px] border-white hover:bg-[#e0ad2f] hover:text-black transition"
+>
+  <FaSearchPlus className="text-sm" />
+  <span>Search</span>
+</button>
+
+
+      {/* ⭐ WHATSAPP & HELP SECTION BELOW ON MOBILE */}
+      <div className="flex justify-center items-center gap-2">
+        <span className="text-white text-[13px] sm:text-[18px] md:text-[20px] font-semibold">
+          Need Help?
+        </span>
+
+        <a
+          href="https://wa.me/+919511195111"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-green-500 text-white p-1 rounded-full shadow-lg hover:bg-green-600 transition"
+        >
+          <FaWhatsapp className="text-xl md:text-2xl" />
+        </a>
+
+        <span className="font-semibold min-h-[30px]">
+          <AnimatedNumberLink />
+        </span>
       </div>
+    </div>
+  )}
+</div>
+
 
       {/* <div className="flex text-nowrap justify-center items-center gap-2 text-gray-700 mt-4 font-medium">
         <div className="flex items-center cursor-pointer text-sm md:text-lg text-white">

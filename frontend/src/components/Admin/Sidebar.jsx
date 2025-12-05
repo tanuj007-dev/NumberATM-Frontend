@@ -7,6 +7,7 @@ import {
   FiHome, FiUsers, FiSettings,
 } from 'react-icons/fi';
 import { PiMicrosoftExcelLogoDuotone } from 'react-icons/pi';
+import { IoMdAdd } from "react-icons/io";
 import {
   LuBadgePercent, LuCircleUser, LuClipboardList,
   LuContactRound,
@@ -85,6 +86,12 @@ const categorizedLinks = [
       { icon: <PiMicrosoftExcelLogoDuotone size={20} />, text: 'Upload Numbers', path: '/admin/upload-numbers' },
     ],
   },
+  {
+    category: 'Featured Number',
+    links: [
+      { icon: <IoMdAdd size={20} />, text: 'Add Featured Number', path: '/admin/featured-numbers' },
+    ],
+  }
 ];
 
 export default function Sidebar({ sidebarOpen, setModalVisible, sidebarCollapsed }) {

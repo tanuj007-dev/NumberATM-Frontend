@@ -3,7 +3,7 @@ import UserAxiosAPI from "../../api/userAxiosAPI";
 import { Link } from "react-router-dom";
 import { Appstate } from "../../App";
 import { motion } from "framer-motion";
-import fallbackImage from "../../assets/vid.jpg";
+import fallbackImage from "../../assets/vid1.png";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";

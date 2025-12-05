@@ -206,7 +206,7 @@ function HomePage() {
             className="
       absolute left-2 top-1/2 -translate-y-1/2 
       z-10 p-2 sm:p-3 
-      bg-white text-black 
+      sm:bg-transparent md:bg-white sm:text-white md:text-black 
       rounded-full shadow 
       hover:bg-gray-100 transition
     "
@@ -220,10 +220,12 @@ function HomePage() {
             aria-label="Next"
             className="
       absolute right-2 top-1/2 -translate-y-1/2 
-      z-10 p-2 sm:p-3 
-      bg-white text-black 
-      rounded-full shadow 
-      hover:bg-gray-100 transition
+    z-10 p-2 sm:p-3 
+    sm:bg-transparent md:bg-white 
+    sm:text-white md:text-black 
+    rounded-full
+    hover:bg-white/20
+    transition
     "
           >
             <FaChevronRight size={18} className="sm:size-[20px]" />
@@ -247,49 +249,45 @@ function HomePage() {
             className="rounded-xl overflow-hidden shadow-lg"
           >
             {/* MOBILE BANNERS */}
-              {window.innerWidth < 500
-              ? [Mbanner1, Mbanner2].map((phone, index) => (
-                  <SwiperSlide key={index}>
-                    <div className="w-full flex justify-center items-center px-1 py-2">
-                      <img
-                        src={phone}
-                        alt={`Mobile Banner ${index + 1}`}
-                        className="
-                w-full 
-                h-[400px]             
-                rounded-xl 
-                object-cover 
-                shadow-sm
-              "
-                      />
-                    </div>
-                  </SwiperSlide>
-                ))
-              : !posters?.length
-              ? Array.from({ length: 2 }).map((_, i) => (
-                  <SwiperSlide key={i}>
-                    <PosterSkeleton />
-                  </SwiperSlide>
-                ))
-              : /* DESKTOP BANNERS */
-                posters.map((poster, index) => (
-                  <SwiperSlide key={index}>
-                    <img
-                      src={getOptimizedImage(poster.image, 1761)}
-                      alt={`Slide ${index + 1}`}
-                      loading={index === 0 ? "eager" : "lazy"}
-                      decoding="async"
-                      fetchpriority={index === 0 ? "high" : "auto"}
-                      className="
+           {!posters?.length
+  ? Array.from({ length: 2 }).map((_, i) => (
+      <SwiperSlide key={i}>
+        <PosterSkeleton />
+      </SwiperSlide>
+    ))
+  : posters.map((poster, index) => (
+      <SwiperSlide key={index}>
+        {poster.mediaType === "image" && (
+          <img
+            src={getOptimizedImage(poster.image, 1761)}
+            alt={`Slide ${index + 1}`}
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
+            fetchpriority={index === 0 ? "high" : "auto"}
+            className="
               w-full 
-              h-[400px] sm:h-[550px] md:h-[500px] 
+              h-[100px] sm:h-[550px] md:h-[500px] 
               object-cover 
-              bg-[#F3FBFA]
               rounded-xl
             "
-                    />
-                  </SwiperSlide>
-                ))}
+          />
+        )}
+
+        {poster.mediaType === "youtube" && (
+          <YouTubeFacade url={poster.image} />
+        )}
+
+        {poster.mediaType === "video" && (
+          <video
+            src={poster.image}
+            className="w-full h-[200px] sm:h-[550px] md:h-[500px] rounded-xl object-cover"
+            controls
+            loop
+          />
+        )}
+      </SwiperSlide>
+    ))}
+
           </Swiper>
         </div>
       </div>

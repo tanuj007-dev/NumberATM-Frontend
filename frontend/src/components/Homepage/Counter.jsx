@@ -27,8 +27,8 @@ export default function StatsCounter() {
                 {/* Semi-transparent overlay */}
                 {/* <div className="absolute inset-0 opacity-90"></div> */}
 
-                <h1 class="text-xl sm:text-3xl font-semibold text-center text-white px-4 [text-shadow:2px_2px_2px_#000]">NumberATM Trusted by 100+ satisfied clients</h1>
-                <h2 class=" text-center text-sm sm:text-xl text-white font-medium [text-shadow:2px_2px_2px_#000]">Reserve your VIP mobile number</h2>
+                <h1 className="text-xl sm:text-3xl font-semibold text-center text-white px-4 [text-shadow:2px_2px_2px_#000]">NumberATM Trusted by 100+ satisfied clients</h1>
+                <h2 className=" text-center text-sm sm:text-xl text-white font-medium [text-shadow:2px_2px_2px_#000]">Reserve your VIP mobile number</h2>
                 {/* Stats content */}
                 <div className="relative max-w-6xl mt-8 mx-auto grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 text-center px-4 ">
                     {stats.map((stat, index) => (

@@ -1,16 +1,41 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import UserAxiosAPI from "../../api/userAxiosAPI";
 import { FaChevronCircleLeft } from "react-icons/fa";
 import { Appstate } from "../../App";
-import fallbackImage from "../../components/assets/vid.jpg";
+import fallbackImage from "../../assets/vid1.png";
 import { motion } from "framer-motion";
+
+const ensureHeadingIds = (html = "") => {
+  if (typeof window === "undefined" || !html) {
+    return { html, tocItems: [] };
+  }
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+  const headings = doc.querySelectorAll("h1, h2, h3, h4");
+
+  const tocItems = [...headings].map((heading, idx) => {
+    const text = heading.textContent?.trim() || `Section ${idx + 1}`;
+    let slug = heading.id || text.toLowerCase().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-");
+    if (!slug) slug = `section-${idx}`;
+    heading.id = slug;
+    return {
+      id: slug,
+      text,
+      level: Number(heading.tagName.replace("H", "")),
+    };
+  });
+
+  return { html: doc.body.innerHTML, tocItems };
+};
 
 const VipArticleDetail = () => {
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
   const [recentBlogs, setRecentBlogs] = useState([]);
   const [toc, setToc] = useState([]);
+  const [activeHeading, setActiveHeading] = useState("");
   const axios = UserAxiosAPI();
   const { getOptimizedImage } = useContext(Appstate);
 
@@ -19,20 +44,54 @@ const VipArticleDetail = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch current blog
-    axios.get(`/blogs/${id}`).then((res) => {
-      setBlog(res.data);
-      generateTOC(res.data.content);
+    const fetchBlog = async () => {
+      try {
+        const res = await axios.get(`/blogs/${id}`);
+        const { html, tocItems } = ensureHeadingIds(res.data?.content);
+        setBlog({ ...res.data, content: html });
+        setToc(tocItems);
+      } catch (error) {
+        console.error("Failed to load blog", error);
+      }
+    };
+
+    const fetchRecent = async () => {
+      try {
+        const res = await axios.get("/blogs");
+        const sortedBlogs = res.data
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 10);
+        setRecentBlogs(sortedBlogs);
+      } catch (error) {
+        console.error("Failed to load recent blogs", error);
+      }
+    };
+
+    fetchBlog();
+    fetchRecent();
+  }, [id]);
+
+  useEffect(() => {
+    if (!toc.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveHeading(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-40% 0px -40% 0px", threshold: 0.1 }
+    );
+
+    toc.forEach((item) => {
+      const el = document.getElementById(item.id);
+      if (el) observer.observe(el);
     });
 
-    // Fetch recent blogs for sidebar
-    axios.get("/blogs").then((res) => {
-      const sortedBlogs = res.data
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .slice(0, 10); // Get 10 most recent
-      setRecentBlogs(sortedBlogs);
-    });
-  }, [id]);
+    return () => observer.disconnect();
+  });
 
   const slugify = (title) =>
     title
@@ -41,24 +100,13 @@ const VipArticleDetail = () => {
       .trim()
       .replace(/\s+/g, "-");
 
-  // Generate Dynamic Table of Contents
-  const generateTOC = (html) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-    const headings = doc.querySelectorAll("h1, h2, h3, h4");
-
-    const tocItems = [...headings].map((h) => {
-      if (!h.id) {
-        h.id = h.innerText.replace(/\s+/g, "-").toLowerCase();
-      }
-      return {
-        id: h.id,
-        text: h.innerText,
-        level: Number(h.tagName.replace("H", "")),
-      };
-    });
-
-    setToc(tocItems);
+  const handleTocClick = (e, id) => {
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      setActiveHeading(id);
+    }
   };
 
   if (!blog)
@@ -67,48 +115,43 @@ const VipArticleDetail = () => {
         <p className="text-lg font-semibold text-gray-700">Loading...</p>
       </div>
     );
-    
 
   return (
     <div className="bg-white min-h-screen">
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
         {/* Main Layout: TOC (Left) + Content (Center) + Recent Articles (Right) */}
-<div className="flex flex-col lg:flex-row items-start gap-6">
-
+        <div className="flex flex-col lg:flex-row items-start gap-6">
           {/* LEFT: Table of Contents */}
-  {toc.length > 0 && (
-  <aside className="hidden lg:block lg:w-64 xl:w-72 h-fit">
-    <div className="sticky top-24">
-      <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 shadow-sm">
-
-        <h2 className="text-lg font-bold text-[#17565D] mb-4">
-          On This Blog
-        </h2>
-
-        <ul className="space-y-2">
-          {toc.map((item, idx) => (
-            <li key={idx} style={{ marginLeft: `${(item.level - 1) * 12}px` }}>
-              <a
-                href={`#${item.id}`}
-                className="text-sm text-[#17565D] hover:text-[#F5C037] hover:underline transition-colors block"
-              >
-                {item.text}
-              </a>
-            </li>
-          ))}
-        </ul>
-
-      </div>
-    </div>
-  </aside>
-)}
-
-
-
+          {toc.length > 0 && (
+            <aside className="hidden lg:block lg:w-64 xl:w-72">
+              <div className="sticky top-24 space-y-4">
+                <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-md">
+                  <h2 className="text-lg font-bold text-[#17565D] mb-4">
+                    On This Blog
+                  </h2>
+                  <ul className="space-y-2">
+                    {toc.map((item, idx) => (
+                      <li key={idx} style={{ marginLeft: `${(item.level - 1) * 12}px` }}>
+                        <a
+                          href={`#${item.id}`}
+                          onClick={(e) => handleTocClick(e, item.id)}
+                          className={`text-sm transition-colors block rounded-md px-2 py-1 ${
+                            activeHeading === item.id
+                              ? "bg-[#17565D]/10 text-[#17565D] font-semibold"
+                              : "text-[#17565D] hover:text-[#F5C037] hover:bg-[#17565D]/5"
+                          }`}
+                        >
+                          {item.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </aside>
+          )}
           {/* CENTER: Main Content */}
           <div className="flex-1 lg:max-w-2xl xl:max-w-3xl px-2 md:px-0">
-            
             {/* Featured Image */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -121,10 +164,8 @@ const VipArticleDetail = () => {
                 alt={blog.title}
                 className="w-full h-full object-cover"
               />
-              
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-              
               {/* Title Overlay on Image */}
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
                 <h1 className="text-2xl md:text-4xl font-bold text-white leading-tight drop-shadow-lg">
@@ -132,7 +173,6 @@ const VipArticleDetail = () => {
                 </h1>
               </div>
             </motion.div>
-
             {/* Article Metadata */}
             <div className="mb-6">
               <p className="text-sm md:text-base text-gray-600">
@@ -144,17 +184,21 @@ const VipArticleDetail = () => {
                 })}
               </p>
             </div>
-
             {/* Mobile Table of Contents */}
             {toc.length > 0 && (
-              <div className="hidden    bg-gray-50 rounded-lg p-6 mb-8 border border-gray-200">
+              <div className="block lg:hidden bg-gray-50 rounded-lg p-6 mb-8 border border-gray-200">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">On This Blog</h2>
                 <ul className="space-y-3">
                   {toc.map((item, idx) => (
                     <li key={idx} style={{ marginLeft: `${(item.level - 1) * 16}px` }}>
                       <a
                         href={`#${item.id}`}
-                        className="text-[#17565D] hover:text-[#F5C037] hover:underline text-sm transition-colors"
+                        onClick={(e) => handleTocClick(e, item.id)}
+                        className={`text-sm transition-colors block rounded-md px-2 py-1 ${
+                          activeHeading === item.id
+                            ? "bg-[#17565D]/10 text-[#17565D] font-semibold"
+                            : "text-[#17565D] hover:text-[#F5C037] hover:bg-[#17565D]/5"
+                        }`}
                       >
                         {item.text}
                       </a>
@@ -163,7 +207,6 @@ const VipArticleDetail = () => {
                 </ul>
               </div>
             )}
-
             {/* Article Content */}
             <div className="prose prose-lg max-w-none ql-editor ql-editor-custom">
               <div dangerouslySetInnerHTML={{ __html: blog.content }}></div>
@@ -183,14 +226,10 @@ const VipArticleDetail = () => {
           {/* RIGHT: Sidebar with Recent Articles */}
           <aside className="lg:w-80 xl:w-96">
             <div className="sticky top-24">
-              
-              {/* Recent Articles Header */}
-              <div className="bg-[#FBBF24] rounded-t-lg px-6 py-4">
-                <h2 className="text-xl font-bold text-[#17565D]">Latest Articles</h2>
-              </div>
-
-              {/* Recent Articles Grid */}
-              <div className="bg-white border border-gray-200 rounded-b-lg p-4">
+              <div className="rounded-2xl border border-gray-100 shadow-md overflow-hidden">
+                <div className="bg-[#FBBF24] px-6 py-4">
+                  <h2 className="text-xl font-bold text-[#17565D]">Latest Articles</h2>
+                </div>
                 <div className="grid grid-cols-2 gap-4 max-h-[800px] overflow-y-auto scrollbar-hide">
                   {recentBlogs
                     .filter((article) => article._id !== blog._id) // Exclude current article
@@ -212,7 +251,6 @@ const VipArticleDetail = () => {
                               />
                             </svg>
                           </div>
-                          
                           <img
                             src={
                               article.imageUrl
@@ -223,7 +261,6 @@ const VipArticleDetail = () => {
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                         </div>
-                        
                         <h3 className="text-xs font-semibold text-[#17565D] line-clamp-2 group-hover:text-[#F5C037  ] transition-colors leading-tight">
                           {article.title}
                         </h3>

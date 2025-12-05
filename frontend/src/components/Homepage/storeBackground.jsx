@@ -16,7 +16,7 @@ const highlighterSearch = (num, searchTerm) => {
     if (!searchTerm || !num.includes(searchTerm)) return num; // Return the original number if no match
 
     // Step 1: Highlight the search term directly (no spacing)
-    const highlightedSearchTerm = `<span class="text-orange-500 mx-1.5 font-bold">${searchTerm}</span>`;
+    const highlightedSearchTerm = `<span className="text-orange-500 mx-1.5 font-bold">${searchTerm}</span>`;
 
     // Step 2: Replace the search term in the number with the highlighted version
     const result = num.replace(new RegExp(searchTerm, "g"), highlightedSearchTerm);

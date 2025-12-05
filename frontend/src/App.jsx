@@ -110,6 +110,7 @@ const PriceBasedMarginsTable = lazy(() =>
 const MetaManagement = lazy(() => import("./components/Admin/MetaManagement"));
 const AddVipBlog = lazy(() => import("./components/Admin/AddBlog"));
 const VipBlogList = lazy(() => import("./components/Admin/VipBlogList"));
+const FeaturedNumbers = lazy(() => import("./components/Admin/FeaturedNumbers"));
 
 function App() {
   const user = useSelector((state) => state.user.user);
@@ -299,6 +300,7 @@ function App() {
                 <Route path="orders" element={<Orders />} />
                 <Route path="vip-numbers" element={<ManageNumbers />} />
                 <Route path="add-vip-number" element={<VIPNumbers />} />
+                <Route path="featured-numbers" element={<FeaturedNumbers />} />
                 <Route path="*" element={<NotFoundPage back={"/admin"} />} />
               </Route>
               <Route path="*" element={<NotFoundPage back="/" />} />

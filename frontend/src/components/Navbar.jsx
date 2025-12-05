@@ -13,6 +13,7 @@ import {
 import Cookies from "js-cookie";
 import CartBadge from "./Homepage/CartBadge";
 import { IoShareSocialOutline } from "react-icons/io5";
+import { IoIosSearch } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { PiUserCircle } from "react-icons/pi";
 import { MdOutlineAttachEmail, MdOutlinePhoneInTalk } from "react-icons/md";
@@ -44,6 +45,7 @@ const Navbar = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const numbers = useSelector((state) => state?.number?.value);
+  const cartItems = useSelector((state) => state?.cart?.items || []);
   const axios = UserAxiosAPI();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -95,6 +97,11 @@ const Navbar = () => {
       ) {
         setSearchTerm("");
         setFilteredNumbers([]);
+      }
+      // Close mobile search popup when clicking outside
+      const mobileSearchDropdown = document.getElementById('mobile-search-dropdown');
+      if (mobileSearchDropdown && !mobileSearchDropdown.contains(event.target)) {
+        mobileSearchDropdown.classList.add('hidden');
       }
     }
 
@@ -318,7 +325,7 @@ const logoutPopupUI = () => (
         </div>
       )}
 
-      <div class="bg-[#F5C037] text-center">
+      <div className="bg-[#F5C037] text-center">
         <Link
           ref={dropdownRef}
           to="/numerology-vip-numbers"
@@ -358,9 +365,9 @@ const logoutPopupUI = () => (
           {/* <div className="w-full md:w-auto flex-1"> */}
 
           <div className="hidden sm:block relative" ref={searchDropdownRef}>
-            <div class="min-w-[30vw]">
-              <div class="bg-[#F3FBFA] p-1 flex items-center rounded-md pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600 pr-2 w-full">
-                <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">
+            <div className="min-w-[30vw]">
+              <div className="bg-[#F3FBFA] p-1 flex items-center rounded-md pl-3 outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600 pr-2 w-full">
+                <div className="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">
                   <FaSearch className="text-lg" />
                 </div>
                 <input
@@ -370,9 +377,9 @@ const logoutPopupUI = () => (
                   placeholder="Search VIP Numbers..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                  className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
                 />
-                <div class="grid shrink-0 grid-cols-1 focus-within:relative">
+                <div className="grid shrink-0 grid-cols-1 focus-within:relative">
                   <CiBoxList className="text-xl" />
                 </div>
               </div>
@@ -412,11 +419,11 @@ const logoutPopupUI = () => (
                                     number.highLightedNumber || number.number,
                                 }}
                               />
-                              {number.owner?.name && (
+                              {/* {number.owner?.name && (
                                 <p className="text-xs text-gray-500">
                                   {number.owner.name}
                                 </p>
-                              )}
+                              )} */}
                             </div>
                             {number.price && (
                               <div className="text-right flex-shrink-0">
@@ -503,10 +510,17 @@ const logoutPopupUI = () => (
               className="flex items-center"
               to="/checkout"
             >
-              <BsCart3
-                style={{ fontSize: "20px" }}
-                class="text-[#17565D] text-lg mx-1"
-              />
+              <div className="relative">
+                <BsCart3
+                  style={{ fontSize: "20px" }}
+                  className="text-[#17565D] text-lg mx-1"
+                />
+                {cartItems.length > 0 && (
+                  <span className="absolute -top-1.5 -right-0 bg-[#17565D] text-white text-[10px] font-semibold leading-none px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+                    {cartItems.length > 99 ? "99+" : cartItems.length}
+                  </span>
+                )}
+              </div>
               <span className="text-[#666666] text-xl hidden sm:block">
                 {" "}
                 Cart
@@ -518,7 +532,7 @@ const logoutPopupUI = () => (
               className="flex items-center"
               to="/numerology-vip-numbers"
             >
-              <IoStorefrontOutline size={22} class="text-[#17565D] mx-1" />{" "}
+              <IoStorefrontOutline size={22} className="text-[#17565D] mx-1" />{" "}
               <span className="hidden sm:block text-[#666666] text-xl">
                 {" "}
                 Store
@@ -673,10 +687,23 @@ const logoutPopupUI = () => (
 
           {/* Mobile Menu Toggle */}
           <div className="flex sm:hidden items-center">
+            {/* Mobile Search Icon */}
+            <button
+              onClick={() => {
+                const searchDropdown = document.getElementById('mobile-search-dropdown');
+                if (searchDropdown) {
+                  searchDropdown.classList.toggle('hidden');
+                }
+              }}
+              className="sm:hidden text-[#17565D] hover:text-[#17565D] p-2 mr-1"
+            >
+              <FaSearch className="h-5 w-5" />
+            </button>
+
             <button
               onClick={toggleMenu}
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-              className="sm:hidden text-[#17565D] hover:text-[#17565D] border-[#17565D] bg-[#F3FBFA] border-[2px] hover:border-[#17565D] py-2 px-2 ml-3"
+              className="sm:hidden text-[#17565D] hover:text-[#17565D] border-[#17565D] bg-[#F3FBFA] border-[2px] hover:border-[#17565D] py-2 px-2"
             >
               {isMenuOpen ? (
                 <FaTimes className="h-6 w-6" />
@@ -799,8 +826,8 @@ const logoutPopupUI = () => (
                   toggleMenu();
                   navigate("/login");
                 }}
-                px-4
-                className="bg-[#17565D] text-white px-6 py-0 rounded-full hover:bg-[#f5C037E6] transition duration-300"
+                
+                className="px-4 bg-[#17565D] text-white px-6 py-0 rounded-full hover:bg-[#f5C037E6] transition duration-300"
               >
                 Log In
               </button>
@@ -812,8 +839,8 @@ const logoutPopupUI = () => (
                     toggleMenu();
                     setShowConf(true);
                   }}
-                  px-4
-                  className=" bg-[#17565D] text-white px-6 py-0 rounded-full hover:bg-[#f5C037E6] transition duration-300"
+                 
+                  className="   px-4 bg-[#17565D] text-white px-6 py-0 rounded-full hover:bg-[#f5C037E6] transition duration-300"
                 >
                   Logout
                 </button>
@@ -822,6 +849,91 @@ const logoutPopupUI = () => (
           </div>
         </div>
       </nav>
+
+      {/* Mobile Search Dropdown Popup */}
+      <div id="mobile-search-dropdown" className="hidden fixed top-16 left-0 right-0 z-[200] bg-white shadow-lg border border-gray-200 p-4 sm:hidden">
+        <div className="max-w-md mx-auto">
+          <div className="bg-[#F3FBFA] p-2 flex items-center rounded-md outline-1 outline-gray-300 focus-within:outline-2 focus-within:outline-[#17565D]">
+            <div className="shrink-0 text-gray-500">
+              <IoIosSearch className="text-sm" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search VIP Numbers..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="block min-w-0 grow py-2 px-3 text-sm text-gray-900 placeholder:text-gray-400 bg-transparent focus:outline-none"
+              autoFocus
+            />
+            <button
+              onClick={() => {
+                setSearchTerm("");
+                setFilteredNumbers([]);
+                document.getElementById('mobile-search-dropdown').classList.add('hidden');
+              }}
+              className="shrink-0 text-gray-500 hover:text-gray-700 p-1"
+            >
+              <FaTimes className="text-sm" />
+            </button>
+          </div>
+
+          {/* Mobile Search Results */}
+          {searchTerm && (
+            <div className="mt-2 bg-white rounded-lg shadow border border-gray-200 max-h-[300px] overflow-y-auto">
+              {loading ? (
+                <div className="p-4 text-center text-gray-500">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#17565D] mx-auto"></div>
+                  <p className="mt-2 text-xs">Searching...</p>
+                </div>
+              ) : filteredNumbers.length > 0 ? (
+                <div className="py-1">
+                  <div className="px-3 py-2 bg-gray-50 border-b border-gray-200">
+                    <p className="text-xs text-gray-600 font-medium">
+                      {filteredNumbers.length} result{filteredNumbers.length > 1 ? "s" : ""}
+                    </p>
+                  </div>
+                  {filteredNumbers.map((number, index) => (
+                    <Link
+                      key={number._id || index}
+                      to={`/vip-number/${number.number}`}
+                      onClick={() => {
+                        setSearchTerm("");
+                        setFilteredNumbers([]);
+                        document.getElementById('mobile-search-dropdown').classList.add('hidden');
+                      }}
+                      className="block px-3 py-2 hover:bg-[#F3FBFA] transition-colors border-b border-gray-100 last:border-b-0 cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <p
+                            className="text-sm font-semibold text-[#17565D]"
+                            dangerouslySetInnerHTML={{
+                              __html: number.highLightedNumber || number.number,
+                            }}
+                          />
+                        </div>
+                        {number.price && (
+                          <div className="text-right flex-shrink-0">
+                            <p className="text-sm font-bold text-[#F5C037]">
+                              ₹{number.price.toLocaleString("en-IN")}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-4 text-center text-gray-500">
+                  <p className="text-xs">
+                    No results for "{searchTerm}"
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
 
       <div className="bg-white border shadow py-2 sm:py-4">
         <div className="flex flex-grow max-h-[50px] justify-start md:justify-center gap-2 overflow-x-auto pb-2">
