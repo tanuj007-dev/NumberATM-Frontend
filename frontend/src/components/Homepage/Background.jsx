@@ -728,6 +728,7 @@
                 Sort by:
               </label>
 
+<<<<<<< HEAD
               <div className="relative w-full max-w-[170px] sm:w-auto flex justify-center sm:justify-end">
                 <select
                   id="sort-by"
@@ -753,15 +754,155 @@
                     font-semibold 
                     text-xs sm:text-sm
                   "
+=======
+              <RiArrowDropDownLine
+                size={20}
+                className="pointer-events-none absolute top-2 right-2 text-gray-600"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Active Filters and Results Section */}
+        {/* <div className="flex flex-wrap rounded-lg items-center text-xs sm:text-sm justify-center sm:justify-between p-1 sm:p-2 bg-[#F3F9FB] gap-2 sm:gap-0">
+          <div className="flex flex-nowrap gap-2 justify-center items-center sm:items-start p-1 whitespace-nowrap overflow-x-auto no-scrollbar">
+            <span className="text-[#5F6C72]">Active Filter :</span>
+            <span className="text-[#191C1F] inline-flex items-center">
+              3 Digit Number
+              <span className="ml-0.5 inline"><RxCross2 /></span>
+            </span>
+          </div>
+
+          <div>
+            <span className="text-gray-800">
+              <strong className="px-2 py-1 text-black font-semibold rounded-md mr-1 shadow-sm">
+                {decryptedNumbers?.length ?? 0}
+              </strong>
+              <span className="text-gray-600">Results found.</span>
+            </span>
+          </div>
+        </div> */}
+      </div>
+
+      <div className="relative pb-6 pt-8">
+        <div className="grid gap-2 sm:gap-4 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4">
+          {decryptedNumbers?.length > 0 ? (
+            decryptedNumbers?.slice(0, visibleCount).map((item, index) => {
+              const isFav = fav?.find((number) => number._id === item._id);
+              return (
+                <div
+                  key={item._id || index}
+                  className="bg-[#fcfae5] rounded-2xl p-2 border-2 border-[#17565D] min-h-[80px] w-full relative max-w-[300px] mx-auto"
+>>>>>>> 0a10a1f09ce7e325098d8bf3d94b7b724ea90e40
                 >
                   <option value="price_asc">Price low to high</option>
                   <option value="price_desc">Price high to low</option>
                 </select>
 
+<<<<<<< HEAD
                 <RiArrowDropDownLine
                   size={20}
                   className="pointer-events-none absolute top-1/2 -translate-y-1/2 right-3 text-gray-600"
                 />
+=======
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            if (isFav) {
+                              removeFavItem(item);
+                            } else {
+                              handleAddToFav(item);
+                            }
+                          }}
+                          className="p-1 rounded-full hover:border-[#FCFAE5] hover:scale-110 bg-[#FCFAE5] transition"
+                        >
+                          {isFav ? (
+                            <FaHeart size={22} className="text-red-500" />
+                          ) : (
+                            <FaRegHeart size={22} className="text-[#17565D]" />
+                          )}
+                        </button>
+
+                        <div className="flex border-[#17565D] border-l-2 pl-2 hidden sm:flex">
+                          <small className="text-sm block leading-none">Sum Total {item?.sum}</small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl overflow-hidden my-3 w-full bg-[length:200%_200%] bg-center" style={{ background: "linear-gradient(90deg, rgb(19,52,55),rgb(44,106,108), rgb(19,52,55))" }}>
+                      <div className="cursor-pointer flex flex-col items-center pt-4 pb-2 space-y-1 w-full ">
+                        <Link
+                          to={`/vip-number/${item.number}`}
+                          className="text-xl sm:text-3xl [transform:scaleY(1.3)] font-semibold text-center text-[#F5C037] px-3"
+                        >
+                          {searchParams.get("searchInput") && item?.number?.includes(searchParams.get("searchInput")) ? (
+                            <div className="[text-shadow:0px_0px_12px_black]" dangerouslySetInnerHTML={{ __html: highlighterSearch(item.number, searchParams.get("searchInput")) }} />
+                          ) : (
+                            <div className="[text-shadow:0px_0px_12px_black]" dangerouslySetInnerHTML={{ __html: item.highLightedNumber }} />
+                          )}
+                        </Link>
+
+                        <Link to={`/vip-number/${item.number}`} className="text-xs min-h-[20px] text-[#F5C037] px-1">
+                          <span className="text-shadow-lg [text-shadow:1px_1px_2px_black]">
+                            {item?.category?.[0]}
+                          </span>
+                        </Link>
+                      </div>
+                    </div>
+
+                    <div className="relative flex justify-between items-center gap-2 w-full text-xs sm:text-sm p-2">
+                      <Link to={`/vip-number/${item.number}`} className="text-center text-sm sm:text-xl font-semibold text-[rgb(22,59,62)]">
+                        { /* Show decrypted roundedFinalPrice if available, else fallback to price */ }
+                        <p className="">{/* price */}₹ {(item?.roundedFinalPrice ?? item?.price ?? 0).toLocaleString("en-IN")}</p>
+                        {item?.displayedDiscount > 0 && (
+                          <p className="relative text-nowrap text-xs md:text-sm font-semibold text-black opacity-50 px-2 py-0.5 md:py-1 rounded-full">
+                            ₹ <span className="line-through">{(item?.roundedOriginalPrice ?? item?.originalPrice ?? 0).toLocaleString("en-IN")}</span>
+                          </p>
+                        )}
+                      </Link>
+
+                      <button
+                        aria-label={"Add to Cart"}
+                        className="text-nowrap font-semibold px-4 py-1 w-1/2 max-h-8 justify-center rounded-full border-2 border-[#F5C037] text-[#17535D] font-medium hover:bg-white hover:border-[#17535D] hover:text-[#17535D] transition-all duration-300 ease-in-out flex items-center gap-2 shadow-md"
+                        style={{ background: "linear-gradient(180deg, #eba800ff, #f0cd75ff, #eba800ff)" }}
+                        onClick={() => {
+                          handleAddToCart(item);
+                          navigate("/checkout");
+                        }}
+                      >
+                        Book Now
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="min-w-full col-span-full flex justify-center px-4 pt-6">
+              <div className="bg-white rounded-2xl shadow-xl max-w-xl p-10 w-full text-center min-h-[300px]">
+                <div className="flex items-center justify-center mb-6">
+                  <div className="bg-orange-100 p-4 rounded-full">
+                    <FaSearch className="text-orange-500 text-3xl" />
+                  </div>
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#17565D] mb-2 min-h-[32px]">
+                  No Results Found
+                </h2>
+
+                <p className="text-gray-500 text-base leading-relaxed mb-6 min-h-[48px]">
+                  Your search didn’t match any results. Adjust your filters to explore more options.
+                </p>
+
+                <button
+                  onClick={resetFilters}
+                  className="inline-flex items-center gap-2 bg-[#F5C037] hover:bg-[#17565D] text-[#17565D] hover:text-[#F5C037] font-medium px-6 py-3 rounded-full transition duration-300 transform hover:scale-105"
+                >
+                  <FaSearch className="text-[#17565D] hover:text-[#F5C037] text-md" />
+                  Reset Filters
+                </button>
+>>>>>>> 0a10a1f09ce7e325098d8bf3d94b7b724ea90e40
               </div>
             </div>
           </div>

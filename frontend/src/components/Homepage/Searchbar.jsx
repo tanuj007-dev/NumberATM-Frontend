@@ -847,7 +847,11 @@ const SearchComponent = ({
 
       {/* ⭐ WHATSAPP & HELP SECTION BELOW ON MOBILE */}
       <div className="flex justify-center items-center gap-2">
+<<<<<<< HEAD
         <span className="text-white text-[13px] sm:text-[18px] md:text-[20px] font-semibold">
+=======
+        <span className="text-white text-[10px] sm:text-[16px] md:text-[20px] font-semibold">
+>>>>>>> 0a10a1f09ce7e325098d8bf3d94b7b724ea90e40
           Need Help?
         </span>
 
